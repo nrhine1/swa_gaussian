@@ -20,7 +20,7 @@ def swag_parameters(module, params, no_cov_mat=True):
         if module._parameters[name] is None:
             continue
         data = module._parameters[name].data
-        module._parameters.pop(name)
+        # module._parameters.pop(name)
         module.register_buffer("%s_mean" % name, data.new(data.size()).zero_())
         module.register_buffer("%s_sq_mean" % name, data.new(data.size()).zero_())
 
@@ -90,8 +90,7 @@ class SWAG(torch.nn.Module):
 
             else:
                 w = mean + scaled_diag_sample
-
-            module.__setattr__(name, w)
+            module.__setattr__(name, torch.nn.Parameter(w))
 
     def sample_fullrank(self, scale, cov, fullrank):
         scale_sqrt = scale ** 0.5
